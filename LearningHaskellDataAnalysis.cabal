@@ -50,9 +50,9 @@ cabal-version:       >=1.10
 
 
 library
-  build-depends:       base >=4.8 && <4.9
+  build-depends:       base >=4.8 && <4.9, csv
   hs-source-dirs:      src
-  exposed-modules:     LearningHaskellDataAnalysis01 LearningHaskellDataAnalysis02
+  exposed-modules:     LearningHaskellDataAnalysis01, LearningHaskellDataAnalysis02
 
 executable median
   -- .hs or .lhs file containing the Main module.
