@@ -29,3 +29,18 @@ applyToColumnInCSV func csv column = either
 
 readColumn :: [String] -> [Double]
 readColumn xs = map read xs
+
+-- Opens a CSV file and applies a function to a column
+-- Returns Either Error Message or the function result
+applyToColumnInCSVFile :: ([String] -> b) -> FilePath -> String -> IO (Either String b)
+applyToColumnInCSVFile func inFileName column = do
+  -- Open and read CSV file
+  input <- readFile inFileName
+  let records = parseCSV inFileName input
+  -- Check to make sure this is a good csv file
+  return $ either
+    handleCSVError
+    (\ csv -> applyToColumnInCSV func csv column)
+    records
+  where
+    handleCSVError csv = Left "This does not appear to be a CSV file."
