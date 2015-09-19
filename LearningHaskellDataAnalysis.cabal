@@ -50,7 +50,7 @@ cabal-version:       >=1.10
 
 
 library
-  build-depends:       base >=4.8 && <4.9, csv
+  build-depends:       base >=4.8 && <4.9, csv, HDBC, sqlite, HDBC-sqlite3
   hs-source-dirs:      src
   exposed-modules:     LearningHaskellDataAnalysis01, LearningHaskellDataAnalysis02
 
