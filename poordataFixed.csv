@@ -1,0 +1,11 @@
+Number,Gender,GivenName,Surname,City,State,Birthday
+1,female,Sue,Roberson,Monroe,LA,12/31/1791
+2,,George,Chavez,Chicago,IL,11/11/1948
+3,male,Dexter,Grubb,Plattsburgh,NY,6/4/1984
+4,male,    ,Knight,Miami,Florida,6/21/1951
+5,male,Jonathan,Thomas,Fort Wayne,IN,1/15/1967
+6,MALE,Brandon,    ,pittsburgh,pa,8/3/1981
+7,male,Daniel,Puga,Evansville,,8/19/1988
+8,Female,Geneva,Espinoza,Springfield,MA,8/11/1992
+9,female,Miriam,Levron,Hicksville,N.Y.,9/7/1965
+10,F,Helen,Pitts,Gibsonia,PA,"3/12/1989"

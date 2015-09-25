@@ -49,10 +49,24 @@ build-type:          Simple
 cabal-version:       >=1.10
 
 
+--Test-Suite test-foo
+--  type:                exitcode-stdio-1.0
+--  hs-source-dirs:      test, src
+--  main-is:             test-foo.hs
+--  build-depends:       base >=4.8 && <4.9, Cabal >= 1.10
+
+
+--Test-Suite test-getColumnInCSV
+--  type:                detailed-0.9
+--  hs-source-dirs:      test, src
+--  test-module:         GetColumnInCSV
+--  build-depends:       base >=4.8 && <4.9, Cabal >= 1.10, csv
+
 library
-  build-depends:       base >=4.8 && <4.9, csv, HDBC, sqlite, HDBC-sqlite3
+  build-depends:       base >=4.8 && <4.9, csv, HDBC, sqlite, HDBC-sqlite3, regex-posix
   hs-source-dirs:      src
-  exposed-modules:     LearningHaskellDataAnalysis01, LearningHaskellDataAnalysis02
+  exposed-modules:     LearningHaskellDataAnalysis01, LearningHaskellDataAnalysis02, LearningHaskellDataAnalysis03
+  exposed:             True
 
 executable median
   -- .hs or .lhs file containing the Main module.
@@ -71,4 +85,12 @@ executable median
   hs-source-dirs:      src
 
   -- Base language which the package is written in.
+  default-language:    Haskell2010
+
+executable hgrep
+  main-is:             hgrep.hs
+  -- other-modules:       LearningHaskellDataAnalysis01
+  -- other-extensions:
+  build-depends:       base >=4.8 && <4.9, regex-posix
+  hs-source-dirs:      src
   default-language:    Haskell2010
