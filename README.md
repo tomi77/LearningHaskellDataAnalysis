@@ -91,3 +91,52 @@ better version
 fixed data
 
     identifyInCSVFileFromColumn (\ x -> not (x =~ "^[1-9][0-9]?/[1-9][0-9]?/[12][0-9][0-9][0-9]$")) "poordataFixed.csv" "Number" "Birthday"
+
+# Chapter 4
+
+    convertCSVFileToSQL "aapl.csv" "aapl.sql" "aapl" ["date STRING", "open REAL", "high REAL", "low REAL", "close REAL", "volume REAL", "adjclose REAL"]
+
+## pullStockClosingPrices
+
+    aapl <- pullStockClosingPrices "aapl.sql" "aapl"
+    plot (PNG "aapl.png") $ Data2D [Title "AAPL"] [] $ aapl
+    plot (PNG "aapl_line.png") $ Data2D [Title "AAPL", Style Lines] [] $ aapl
+    plot (PNG "aapl_oneyear.png") $ Data2D [Title "AAPL", Style Lines] [] $ take 252 aapl
+
+## applyPercentChangeToData
+
+    aapl <- pullStockClosingPrices "aapl.sql" "aapl"
+    let aapl252 = take 252 aapl
+    let aapl252pc = applyPercentChangeToData aapl252
+
+google
+
+    convertCSVFileToSQL "googl.csv" "googl.sql" "googl" ["date STRING", "open REAL", "high REAL", "low REAL", "close REAL", "volume REAL", "adjclose REAL"]
+    googl <- pullStockClosingPrices "googl.sql" "googl"
+    let googl252 = take 252 googl
+    let googl252pc = applyPercentChangeToData googl252
+
+microsoft
+
+    convertCSVFileToSQL "msft.csv" "msft.sql" "msft" ["date STRING", "open REAL", "high REAL", "low REAL", "close REAL", "volume REAL", "adjclose REAL"]
+    msft <- pullStockClosingPrices "msft.sql" "msft"
+    let msft252 = take 252 msft
+    let msft252pc = applyPercentChangeToData msft252
+
+all data
+
+    plot (PNG "aapl_googl_msft_pc.png") [Data2D [Title "AAPL - One Year, % Change", Style Lines, Color Red] [] aapl252pc, Data2D [Title "GOOGL - One Year, % Change", Style Lines, Color Blue] [] googl252pc, Data2D [Title "MSFT - One Year, % Change", Style Lines, Color Green] [] msft252pc]
+
+## applyMovingAverageToData
+
+    aapl <- pullStockClosingPrices "aapl.sql" "aapl"
+    let aapl252 = take 252 aapl
+    let aapl252pc = applyPercentChangeToData aapl252
+    let aapl252ma20 = applyMovingAverageToData aapl252pc 20
+    plot (PNG "aapl_20dayma.png") [Data2D [Title "AAPL - One Year, % Change", Style Lines, Color Red] [] aapl252pc, Data2D [Title "AAPL 20-Day MA", Style Lines, Color Black] [] aapl252ma20]
+
+earthquakes
+
+    convertCSVFileToSQL "all_month.csv" "earthquakes.sql" "oneMonth" ["time TEXT", "latitude REAL", "longitude REAL", "depth REAL", "mag REAL", "magType TEXT", "nst INTEGER", "gap REAL", "dmin REAL", "rms REAL", "net REAL", "id TEXT", "updated TEXT", "place TEXT", "type TEXT"]
+    coords <- pullLatitudeLongitude "earthquakes.sql" "oneMonth"
+    plot (PNG "earthquakes.png") [Data2D [Title "Earthquakes", Color Red, Style Dots] [] coords]
