@@ -63,9 +63,22 @@ cabal-version:       >=1.10
 --  build-depends:       base >=4.8 && <4.9, Cabal >= 1.10, csv
 
 library
-  build-depends:       base >=4.8 && <4.9, csv, HDBC, sqlite, HDBC-sqlite3, regex-posix, easyplot
+  build-depends:       base >=4.8 && <4.9
+                     , csv
+                     , HDBC
+                     , sqlite
+                     , HDBC-sqlite3
+                     , regex-posix
+                     , easyplot
+                     , exact-combinatorics
+                     , random
+                     , erf
   hs-source-dirs:      src
-  exposed-modules:     LearningHaskellDataAnalysis01, LearningHaskellDataAnalysis02, LearningHaskellDataAnalysis03, LearningHaskellDataAnalysis04
+  exposed-modules:     LearningHaskellDataAnalysis01
+                     , LearningHaskellDataAnalysis02
+                     , LearningHaskellDataAnalysis03
+                     , LearningHaskellDataAnalysis04
+                     , LearningHaskellDataAnalysis05
   exposed:             True
 
 executable median
@@ -94,3 +107,9 @@ executable hgrep
   build-depends:       base >=4.8 && <4.9, regex-posix
   hs-source-dirs:      src
   default-language:    Haskell2010
+
+executable applyMovingAverageToData
+  build-depends:       base >=4.8 && <4.9, easyplot, sqlite, HDBC, HDBC-sqlite3, csv
+  hs-source-dirs:      src
+  default-language:    Haskell2010
+  main-is:             applyMovingAverageToData.hs

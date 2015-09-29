@@ -140,3 +140,62 @@ earthquakes
     convertCSVFileToSQL "all_month.csv" "earthquakes.sql" "oneMonth" ["time TEXT", "latitude REAL", "longitude REAL", "depth REAL", "mag REAL", "magType TEXT", "nst INTEGER", "gap REAL", "dmin REAL", "rms REAL", "net REAL", "id TEXT", "updated TEXT", "place TEXT", "type TEXT"]
     coords <- pullLatitudeLongitude "earthquakes.sql" "oneMonth"
     plot (PNG "earthquakes.png") [Data2D [Title "Earthquakes", Color Red, Style Dots] [] coords]
+
+# Chapter 5
+
+## probabilityMassFunction
+
+    :l src/LearningHaskellDataAnalysis02 src/LearningHaskellDataAnalysis04 src/LearningHaskellDataAnalysis05
+    :m LearningHaskellDataAnalysis02 LearningHaskellDataAnalysis04 LearningHaskellDataAnalysis05
+    import Graphics.EasyPlot
+    plot (PNG "coinflips.png") $ Function2D [Title "Coin Flip Probabilities"] [Range 0 1000] (\ k -> probabilityMassFunction (floor k) 1000 0.5)
+
+perfect
+
+    probabilityMassFunction 500 1000 0.5
+
+sum
+
+    sum $ map (\ k -> probabilityMassFunction k 1000 0.5) [0..1000]
+
+99%
+
+    sum $ map (\ k -> probabilityMassFunction k 1000 0.5) [460..540]
+
+random
+
+    import System.Random
+    g <- newStdGen
+    random g :: (Double, StdGen)
+
+3 random double
+
+    take 3 $ randoms g :: [Double]
+
+5 random integers from 0 to 100
+
+    take 5 $ randomRs (0, 100) g
+
+random coin flips
+
+    let coinflips = take 1000 $ randomRs (0, 1) g
+    sum coinflips
+
+baseball
+
+    import LearningHaskellDataAnalysis02
+    convertCSVFileToSQL "winloss2014.csv" "winloss.sql" "winloss" ["date TEXT", "awayteam TEXT", "hometeam TEXT", "awayscore INTEGER", "homescore INTEGER"]
+    import LearningHaskellDataAnalysis04
+    queryDatabase "winloss.sql" "SELECT SUM(awayscore), SUM(homescore) FROM winloss"
+    runsAtHome <- queryDatabase "winloss.sql" "SELECT hometeam, SUM(homescore) FROM winloss GROUP BY hometeam ORDER BY hometeam"
+    runsAway <- queryDatabase "winloss.sql" "SELECT awayteam, SUM(awayscore) FROM winloss GROUP BY awayteam ORDER BY awayteam"
+    let runsHomeAway = zip (readDoubleColumn runsAtHome 1) (readDoubleColumn runsAway 1)
+    import Graphics.EasyPlot
+    plot (PNG "HomeScoreAwayScore.png") $ Data2D [Title "Runs at Home (x axis) and RunsAway (y axis)"] [] runsHomeAway
+    let runsHomeAwayDiff = map (\ (a, b) -> a - b) runsHomeAway
+    plot (PNG "HomeScoreAwayScoreDiff.png") $ Data2D [Title "Difference in Runs at Home and Runs Away"] [] $ zip [1..] runsHomeAwayDiff
+    average runsHomeAwayDiff
+    standardDeviation runsHomeAwayDiff
+    import Data.List
+    standardDeviation runsHomeAwayDiff / (sqrt $ genericLength runsHomeAwayDiff)
+    plot (PNG "standardNormal.png") $ Function2D [Title "Standard Normal"] [Range (-4) 4] (\ x -> exp(-(x*x)/2)/sqrt(2*pi))
