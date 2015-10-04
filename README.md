@@ -199,3 +199,29 @@ baseball
     import Data.List
     standardDeviation runsHomeAwayDiff / (sqrt $ genericLength runsHomeAwayDiff)
     plot (PNG "standardNormal.png") $ Function2D [Title "Standard Normal"] [Range (-4) 4] (\ x -> exp(-(x*x)/2)/sqrt(2*pi))
+
+# Chapter 6
+
+    import LearningHaskellDataAnalysis04
+    import LearningHaskellDataAnalysis04
+    import LearningHaskellDataAnalysis05
+    import LearningHaskellDataAnalysis06
+    queryDatabase "winloss.sql" "SELECT COUNT(*) FROM winloss"
+    queryDatabase "winloss.sql" "SELECT COUNT(*) FROM winloss WHERE awayscore == homescore"
+    homeRecord <- queryDatabase "winloss.sql" "SELECT homeTeam, SUM(homescore > awayscore), SUM(homescore), COUNT(*) FROM winloss GROUP BY homeTeam"
+    awayRecord <- queryDatabase "winloss.sql" "SELECT awayTeam, SUM(awayscore > homescore), SUM(awayscore), COUNT(*) FROM winloss GROUP BY awayTeam"
+    let totalWins = zipWith (+) (readDoubleColumn homeRecord 1) (readDoubleColumn awayRecord 1)
+    let totalRuns = zipWith (+) (readDoubleColumn homeRecord 2) (readDoubleColumn awayRecord 2)
+    let totalGames = zipWith (+) (readDoubleColumn homeRecord 3) (readDoubleColumn awayRecord 3)
+    let winPrecentage = zipWith (/) totalWins totalGames
+    let runsPerGame = zipWith (/) totalRuns totalGames
+    any (\ xi -> abs((xi - average runsPerGame) / standardDeviation runsPerGame) > 3) runsPerGame
+    any (\ xi -> abs((xi - average winPrecentage ) / standardDeviation winPrecentage ) > 3) winPrecentage
+    import Graphics.EasyPlot
+    plot (PNG "runs_and_wins.png") $ Data2D [Title "Runs per Game VS Win % in 2014", Color Red] [] $ zip runsPerGame winPrecentage
+    pearsonR runsPerGame winPrecentage
+    pearsonRsqrd runsPerGame winPrecentage
+    let (gradient, intercept) = linearRegression runsPerGame winPrecentage
+    let winEstimate = map (\ x -> x * gradient + intercept) [3.3, 3.4 .. 4.7]
+    let regressionLine = zip [3.3, 3.4 .. 4.7] winEstimate
+    plot (PNG "runs_and_wins_with_regression.png") [Data2D [Title "Runs per Game VS Win % in 2014", Color Red] [] (zip runsPerGame winPrecentage), Data2D [Title "Regression Line", Style Lines, Color Blue] [] regressionLine]

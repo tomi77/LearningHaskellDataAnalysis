@@ -79,6 +79,7 @@ library
                      , LearningHaskellDataAnalysis03
                      , LearningHaskellDataAnalysis04
                      , LearningHaskellDataAnalysis05
+                     , LearningHaskellDataAnalysis06
   exposed:             True
 
 executable median
